@@ -1,27 +1,22 @@
 #include <EEPROM.h>
 
-// 定义 EEPROM 大小
 #define EEPROM_SIZE 512
 
 void setup() {
-  // 初始化串口监视器
-  Serial.begin(115200);
-  delay(1000); // 等待串口监视器打开
 
-  // 初始化 EEPROM
+  Serial.begin(115200);
+  delay(1000);
+
   if (!EEPROM.begin(EEPROM_SIZE)) {
     Serial.println("Failed to initialize EEPROM");
     return;
   }
 
-  // 清除 EEPROM
   clearEEPROM();
 
-  // 写入数据
   writeEEPROM(0, 42);
   writeEEPROM(1, 100);
 
-  // 读取并打印数据
   Serial.print("Data at address 0: ");
   Serial.println(readEEPROM(0));
   Serial.print("Data at address 1: ");
@@ -29,34 +24,31 @@ void setup() {
 }
 
 void loop() {
-  // 可在这里添加其他逻辑
+
 }
 
-// 清除 EEPROM 的函数
 void clearEEPROM() {
   Serial.println("Clearing EEPROM...");
   for (int i = 0; i < EEPROM_SIZE; i++) {
-    EEPROM.write(i, 0x00); // 清除数据，写入0x00
+    EEPROM.write(i, 0x00);
   }
-  EEPROM.commit(); // 确保数据写入 EEPROM
+  EEPROM.commit();
   Serial.println("EEPROM cleared");
 }
 
-// 写入 EEPROM 的函数
 void writeEEPROM(int address, uint8_t value) {
   if (address < 0 || address >= EEPROM_SIZE) {
     Serial.println("Address out of range");
     return;
   }
   EEPROM.write(address, value);
-  EEPROM.commit(); // 确保数据写入 EEPROM
+  EEPROM.commit();
   Serial.print("Written ");
   Serial.print(value);
   Serial.print(" to address ");
   Serial.println(address);
 }
 
-// 读取 EEPROM 的函数
 uint8_t readEEPROM(int address) {
   if (address < 0 || address >= EEPROM_SIZE) {
     Serial.println("Address out of range");
